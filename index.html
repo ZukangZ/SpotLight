@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang=en-US><head><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Spot Light</title></head><style>body{margin:0;background-color:black;overflow:hidden}button{color:red;background-color:rgba(0,0,0,0);position:absolute}</style><body><button type=button onclick=stopStart()>Stop/Start</button></body><script>class dot{constructor(){this.x=(can.width-dotRadius)*Math.random()+dotRadius;this.y=(can.height-dotRadius)*Math.random()+dotRadius;this.vX=4*Math.random()-2;this.vY=4*Math.random()-2;this.color="rgba("+Math.floor(256*Math.random())+","
++Math.floor(256*Math.random())+","
++Math.floor(256*Math.random())+", 1)";}
+step(){this.bound();this.x+=this.vX;this.y+=this.vY;}
+bound(){if(this.y+dotRadius>can.height)this.vY=-Math.abs(this.vY);else if(this.y-dotRadius<0)this.vY=Math.abs(this.vY);if(this.x+dotRadius>can.width)this.vX=-Math.abs(this.vX);else if(this.x-dotRadius<0)this.vX=Math.abs(this.vX);}
+drawDot(dis){c.beginPath();c.fillStyle=this.color.replace(" 1",(1-dis/mouseRadius).toFixed(1));c.arc(this.x,this.y,dotRadius,0,2*Math.PI);c.fill();}
+drawLine(arr,dis){var tmp=0;var count=0;for(var i=0;i<arr.length;i++){for(var j=i+1;j<arr.length;j++){if(count>2)return;tmp=(this.x-arr[j].x)**2+(this.y-arr[j].y)**2
+if(mouseRadius>tmp){c.beginPath();c.strokeStyle=this.color.replace("1",(.8-dis/mouseRadius).toFixed(1));c.moveTo(this.x,this.y);c.lineTo(arr[j].x,arr[j].y);c.stroke();count++;}}}}}
+function stopStart(){if(t!==0){window.cancelAnimationFrame(t);t=0;}
+else t=window.requestAnimationFrame(run);}
+document.body.addEventListener("mousemove",function(e){mos.x=e.clientX;mos.y=e.clientY;});window.addEventListener("resize",function(){can.width=window.innerWidth;can.height=window.innerHeight;});function run(){c.clearRect(0,0,can.width,can.height);var arr=[];var dis=0;for(var i=0;i<dots.length;i++){dots[i].step();dis=(mos.x-dots[i].x)**2+(mos.y-dots[i].y)**2;if(mouseRadius>dis){arr.push(dots[i]);}}
+for(var i=0;i<arr.length;i++){dis=(mos.x-arr[i].x)**2+(mos.y-arr[i].y)**2;arr[i].drawDot(dis);}
+t=window.requestAnimationFrame(run);}
+var dots=[];var dotRadius=4;var mouseRadius=70000;const mos={x:window.innerWidth/2,y:window.innerHeight/2}
+var can=document.createElement("canvas");var c=can.getContext("2d");document.body.appendChild(can);can.width=window.innerWidth;can.height=window.innerHeight;c.lineWidth=1;for(var i=0;i<150;i++){dots.push(new dot());}
+window.requestAnimationFrame(run);</script></html>
